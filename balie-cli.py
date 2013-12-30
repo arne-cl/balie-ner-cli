@@ -16,6 +16,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301, USA.
 
+from __future__ import print_function
+
 import os
 import sys
 import re
@@ -54,11 +56,11 @@ def balie_ner_chunker(untagged):
     balie = Popen(["java", "-cp", ".:./lib/weka.jar", balie_class_name],
                   cwd=balie_dir, shell=False, stdout=PIPE, stderr=PIPE)
     #~ if balie.stderr.read():
-        #~ print balie.stderr
+        #~ print(balie.stderr)
         #~ raise Exception("Java Runtime Error")
 
     balie_regex = re.compile('<ENAMEX\s+[^>]*?TYPE="(?P<type>\w+)"\s+[^>]*?ALIAS="(?P<alias>\w+)">(?P<entity>.+?)</ENAMEX>', re.DOTALL | re.I)
-    output = balie.stdout.read()
+    output = balie.stdout.read().decode('utf8')
     named_entities = [(ne, ne_type) for (ne_type, pos, ne) in balie_regex.findall(output)]
     os.chdir(working_dir)
     return named_entities
@@ -159,10 +161,10 @@ def parse_cli_args(argv):
             input_file = open(args.input, "r")
             input_str = input_file.read()
         except IOError:
-            print "Can't read from input file: {0}".format(args.input)
+            print("Can't read from input file: {0}".format(args.input))
             sys.exit(1)
     else:
-        print "No input file given."
+        print("No input file given.")
         sys.exit(1)
 
     if args.output is not None:
