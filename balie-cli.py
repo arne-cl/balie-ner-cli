@@ -179,6 +179,6 @@ if __name__ == "__main__":
     input_str, output_file = parse_cli_args(sys.argv[1:])
     named_entities = balie_ner_chunker(input_str)
     for named_entity in named_entities:
-        output_file.write("{0}\n".format(named_entity))
+        output_file.write("{0}\t{1}\n".format(named_entity[0], named_entity[1]))
     output_file.close()
 
